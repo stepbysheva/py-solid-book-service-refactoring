@@ -1,39 +1,39 @@
 from __future__ import annotations
 
 import json
-import xml.etree.ElementTree as ET
-from abc import abstractmethod, ABC
+import xml.etree.ElementTree as Et
+from abc import ABC
 
 
 class Book(ABC):
-    def __init__(self, title: str, content: str):
+    def __init__(self, title: str, content: str) -> None:
         self.title = title
         self.content = content
 
-    def display(self, *args, **kwargs):
+    def display(self, *args, **kwargs) -> None:
         pass
 
 
 class Serializer(Book):
-    def __init__(self, title: str, content: str):
+    def __init__(self, title: str, content: str) -> None:
         super().__init__(title, content)
 
-    def display(self, serialize_type):
+    def display(self, serialize_type: str) -> Et | json:
         if serialize_type == "json":
             return json.dumps({"title": self.title, "content": self.content})
         elif serialize_type == "xml":
-            root = ET.Element("book")
-            title = ET.SubElement(root, "title")
+            root = Et.Element("book")
+            title = Et.SubElement(root, "title")
             title.text = self.title
-            content = ET.SubElement(root, "content")
+            content = Et.SubElement(root, "content")
             content.text = self.content
-            return ET.tostring(root, encoding="unicode")
+            return Et.tostring(root, encoding="unicode")
         else:
             raise ValueError(f"Unknown serialize type: {serialize_type}")
 
 
 class Print(Book):
-    def __init__(self, title: str, content: str):
+    def __init__(self, title: str, content: str) -> None:
         super().__init__(title, content)
 
     def display(self, print_type: str) -> None:
@@ -48,7 +48,7 @@ class Print(Book):
 
 
 class Display(Book):
-    def __init__(self, title: str, content: str):
+    def __init__(self, title: str, content: str) -> None:
         super().__init__(title, content)
 
     def display(self, display_type: str) -> None:
